@@ -1,1 +1,248 @@
-# Birthday-Card
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Bonda ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+  color: white;
+  background: linear-gradient(135deg, #ff758c, #ff7eb3);
+}
+
+/* ❤️ HEART BACKGROUND */
+#hearts-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.heart {
+  position: absolute;
+  color: rgba(255,255,255,0.7);
+  font-size: 18px;
+  animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(100vh); opacity: 1; }
+  100% { transform: translateY(-10vh); opacity: 0; }
+}
+
+/* 🎞️ CINEMATIC BACKGROUND */
+#bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  display: none;
+}
+
+.bg-slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center center;
+  filter: brightness(0.6);
+  transition: opacity 1.5s ease-in-out, transform 3s ease-in-out;
+}
+
+/* 💖 MAIN LAYOUT FIX */
+.container {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+  z-index: 2;
+}
+
+/* TOP SECTION */
+.top {
+  margin-top: 40px;
+}
+
+h1 {
+  font-size: 2.6em;
+  text-shadow: 2px 2px 10px black;
+}
+
+button {
+  padding: 12px 22px;
+  font-size: 16px;
+  border: none;
+  border-radius: 25px;
+  background: white;
+  color: #ff4b7d;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: opacity 0.8s ease;
+}
+
+#introText {
+  transition: opacity 0.8s ease;
+  margin-top: 10px;
+}
+
+/* 💌 BOTTOM SECTION (FIXED POSITION) */
+.bottom {
+  margin-bottom: 80px; /* 👈 slightly above footer */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#message {
+  font-size: 19px;
+  width: 80%;
+  text-shadow: 2px 2px 10px black;
+  margin-bottom: 10px;
+}
+
+#final {
+  font-size: 22px;
+  text-shadow: 2px 2px 10px black;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ❤️ HEART BACKGROUND -->
+<div id="hearts-bg"></div>
+
+<!-- 🎞️ CINEMATIC BACKGROUND -->
+<div id="bg">
+  <div id="slide1" class="bg-slide"></div>
+  <div id="slide2" class="bg-slide"></div>
+</div>
+
+<div class="container">
+
+  <!-- TOP -->
+  <div class="top">
+    <h1>🎂 Happy Birthday Bonda ❤️</h1>
+
+    <p id="introText">Click below… I made something just for you 💌</p>
+
+    <button onclick="start()">Open Your Surprise 💖</button>
+  </div>
+
+  <!-- BOTTOM (FIXED AREA) -->
+  <div class="bottom">
+    <p id="message"></p>
+    <p id="final">Currently Missing You ❤️</p>
+  </div>
+
+</div>
+
+<audio id="music" loop>
+  <source src="https://www.bensound.com/bensound-music/bensound-romantic.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+
+// 💌 text
+const text = "You came into my life quietly, but somehow became the loudest feeling in my heart without even trying at all. Even your absence feels heavy, like my world pauses slightly, waiting for you to return and make everything right again . ❤️";
+
+let i = 0;
+function typeWriter() {
+  if (i < text.length) {
+    document.getElementById("message").innerHTML += text.charAt(i);
+    i++;
+    setTimeout(typeWriter, 40);
+  }
+}
+
+// 🖼️ images
+const images = [
+  "images/1.JPEG",
+  "images/2.JPEG",
+  "images/3.JPEG",
+  "images/4.JPEG",
+  "images/5.JPEG"
+];
+
+let index = 0;
+let started = false;
+
+// 🎞️ slideshow
+function startSlideshow() {
+  const bg = document.getElementById("bg");
+  const slide1 = document.getElementById("slide1");
+  const slide2 = document.getElementById("slide2");
+
+  bg.style.display = "block";
+
+  slide1.style.backgroundImage = `url('${images[0]}')`;
+  slide1.style.opacity = 1;
+
+  setInterval(() => {
+    const active = (index % 2 === 0) ? slide1 : slide2;
+    const next = (index % 2 === 0) ? slide2 : slide1;
+
+    index = (index + 1) % images.length;
+
+    next.style.backgroundImage = `url('${images[index]}')`;
+    next.style.opacity = 1;
+    next.style.transform = "scale(1.05)";
+
+    active.style.opacity = 0;
+    active.style.transform = "scale(1)";
+  }, 3000);
+}
+
+// ❤️ hearts
+function createHearts() {
+  const container = document.getElementById("hearts-bg");
+
+  for (let i = 0; i < 40; i++) {
+    let heart = document.createElement("div");
+    heart.classList.add("heart");
+    heart.innerHTML = "💖";
+    heart.style.left = Math.random() * 100 + "vw";
+    heart.style.animationDuration = (3 + Math.random() * 5) + "s";
+    container.appendChild(heart);
+  }
+}
+
+// 🎁 start everything
+function start() {
+  if (started) return;
+  started = true;
+
+  const btn = document.querySelector("button");
+  const intro = document.getElementById("introText");
+
+  btn.style.opacity = "0";
+  intro.style.opacity = "0";
+
+  setTimeout(() => {
+    btn.style.display = "none";
+    intro.style.display = "none";
+  }, 800);
+
+  document.getElementById("music").play();
+
+  typeWriter();
+  startSlideshow();
+}
+
+// init hearts
+createHearts();
+
+</script>
+
+</body>
+</html>
